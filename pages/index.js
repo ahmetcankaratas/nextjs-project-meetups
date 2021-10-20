@@ -1,18 +1,32 @@
+import Head from 'next/head';
+import { Fragment } from 'react'
+
 import { MongoClient } from 'mongodb';
 
 import MeetupList from '../components/meetups/MeetupList';
 
-const CONNECTION_STRING = process.env.DB; 
+const CONNECTION_STRING = process.env.DB;
 
-function HomePage(props){
-    return <MeetupList meetups={props.meetups} />
+function HomePage(props) {
+    return (
+        <Fragment>
+            <Head>
+                <title>React Meetups</title>
+                <meta 
+                name="description"
+                content="Browse a huge list of highly active React meetups!" 
+                />
+            </Head>
+            <MeetupList meetups={props.meetups} /> 
+        </Fragment>
+            )
 }
 
 //export async function getServerSideProps(context) {
 //  const req = context.req;
 //  const res = context.res;
 
-  // fetch data from an API
+// fetch data from an API
 
 //  return {
 //      props: {
@@ -21,7 +35,7 @@ function HomePage(props){
 //  }
 //}
 
-export async function getStaticProps(){
+export async function getStaticProps() {
     // fetch data from an API
     const client = await MongoClient.connect(CONNECTION_STRING)
     const db = client.db();
@@ -36,7 +50,7 @@ export async function getStaticProps(){
         props: {
             meetups: meetups.map(meetup => ({
                 title: meetup.title,
-                address: meetup. address,
+                address: meetup.address,
                 image: meetup.image,
                 id: meetup._id.toString()
             }))
